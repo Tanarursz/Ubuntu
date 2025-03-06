@@ -14,6 +14,15 @@ Ubuntu szerver indításakor a következő lépések történnek:
 sudo nano /etc/default/grub
 ```
 
+Konfiguráció példa:
+
+```bash
+GRUB_DEFAULT=0
+GRUB_TIMEOUT=5
+GRUB_CMDLINE_LINUX_DEFAULT="quiet splash"
+GRUB_CMDLINE_LINUX=""
+```
+
 A módosítások után frissítés:
 
 ```bash
@@ -48,6 +57,12 @@ sudo systemctl set-default multi-user.target
 sudo fdisk /dev/sdb
 ```
 
+Parancsok:
+
+- `n` - Új partíció létrehozása
+- `p` - Elsődleges partíció
+- `w` - Módosítások mentése
+
 ### Fájlrendszer létrehozása
 
 ```bash
@@ -66,49 +81,25 @@ sudo mount /dev/sdb1 /mnt
 /dev/sdb1  /mnt  ext4  defaults  0  2
 ```
 
-## 4. Fájlhozzáférések és ACL-ek
+## 4. DHCP és DNS szolgáltatások
 
-### Fájlengedélyek módosítása
-
-```bash
-sudo chmod 755 fájl_neve
-```
-
-### Tulajdonos módosítása
-
-```bash
-sudo chown user:group fájl_neve
-```
-
-### ACL használata
-
-```bash
-sudo setfacl -m u:felhasználó:rwx fájl_neve
-```
-
-## 5. Shell-beállítások, segédprogramok és pipeline
-
-### Shell környezeti változók beállítása
-
-```bash
-export PATH=$PATH:/custom/path
-```
-
-### Pipeline használata
-
-```bash
-ls -l | grep .txt | wc -l
-```
-
-## 6. DHCP és DNS szolgáltatások
-
-### DHCP szerver telepítése
+### DHCP szerver telepítése és beállítása
 
 ```bash
 sudo apt install isc-dhcp-server
 ```
 
-Konfiguráció (`/etc/dhcp/dhcpd.conf` szerkesztése).
+Konfiguráció (`/etc/dhcp/dhcpd.conf`):
+
+```bash
+default-lease-time 600;
+max-lease-time 7200;
+subnet 192.168.1.0 netmask 255.255.255.0 {
+    range 192.168.1.100 192.168.1.200;
+    option routers 192.168.1.1;
+    option domain-name-servers 8.8.8.8, 8.8.4.4;
+}
+```
 
 ### DNS szerver (Bind9) telepítése
 
@@ -116,43 +107,52 @@ Konfiguráció (`/etc/dhcp/dhcpd.conf` szerkesztése).
 sudo apt install bind9
 ```
 
-Konfiguráció: `/etc/bind/named.conf.local`
-
-## 7. Forgalomirányítás és címfordítás (NAT)
-
-### IP forwarding engedélyezése
+Konfiguráció (`/etc/bind/named.conf.local`):
 
 ```bash
-echo 1 | sudo tee /proc/sys/net/ipv4/ip_forward
+zone "example.com" {
+    type master;
+    file "/etc/bind/db.example.com";
+};
 ```
 
-### Masquerading beállítása
+## 5. Web- és adatbázis-kiszolgálók
 
-```bash
-sudo iptables -t nat -A POSTROUTING -o eth0 -j MASQUERADE
-```
-
-## 8. Web- és adatbázis-kiszolgálók
-
-### Apache telepítése
+### Apache telepítése és beállítása
 
 ```bash
 sudo apt install apache2
 ```
 
-### MySQL telepítése
+Konfiguráció (`/etc/apache2/sites-available/000-default.conf`):
+
+```bash
+<VirtualHost *:80>
+    DocumentRoot /var/www/html
+    ErrorLog ${APACHE_LOG_DIR}/error.log
+    CustomLog ${APACHE_LOG_DIR}/access.log combined
+</VirtualHost>
+```
+
+Újrakonfigurálás:
+
+```bash
+sudo systemctl restart apache2
+```
+
+### MySQL telepítése és beállítása
 
 ```bash
 sudo apt install mysql-server
 ```
 
-### PHP telepítése
+Biztonsági beállítások:
 
 ```bash
-sudo apt install php libapache2-mod-php
+sudo mysql_secure_installation
 ```
 
-## 9. Tűzfal és proxy beállítások
+## 6. Tűzfal és Proxy beállítások
 
 ### UFW tűzfal beállítása
 
@@ -161,15 +161,21 @@ sudo ufw enable
 sudo ufw allow 80/tcp
 ```
 
-### Squid proxy telepítése
+### Squid proxy telepítése és konfigurálása
 
 ```bash
 sudo apt install squid
 ```
 
-Konfiguráció: `/etc/squid/squid.conf`
+Konfiguráció (`/etc/squid/squid.conf`):
 
-## 10. Shell-szkriptek
+```bash
+acl mynet src 192.168.1.0/24
+http_access allow mynet
+http_port 3128
+```
+
+## 7. Shell-szkriptek
 
 ### Egyszerű shell script létrehozása
 
@@ -180,20 +186,36 @@ chmod +x script.sh
 ./script.sh
 ```
 
-## 11. Levelezési szolgáltatások
+## 8. Levelezési szolgáltatások
 
-### Postfix telepítése
+### Postfix telepítése és konfigurálása
 
 ```bash
 sudo apt install postfix
 ```
 
-### Dovecot telepítése (IMAP/POP3 szerver)
+Beállítás (`/etc/postfix/main.cf`):
+
+```bash
+myhostname = mail.example.com
+mydestination = example.com, localhost.localdomain, localhost
+relayhost = 
+mailbox_size_limit = 0
+recipient_delimiter = +
+inbox_style = Maildir
+```
+
+### Dovecot telepítése és konfigurálása
 
 ```bash
 sudo apt install dovecot-imapd dovecot-pop3d
 ```
 
-Konfiguráció: `/etc/postfix/main.cf` és `/etc/dovecot/dovecot.conf`
+Konfiguráció (`/etc/dovecot/dovecot.conf`):
 
-Ez a dokumentum összefoglalja az Ubuntu szerver alapvető beállításait és szolgáltatásait.
+```bash
+protocols = imap pop3
+mail_location = maildir:~/Maildir
+```
+
+Ez a dokumentum részletes beállításokat tartalmaz az Ubuntu szerverhez.
