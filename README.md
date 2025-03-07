@@ -53,7 +53,7 @@ sudo systemctl set-default multi-user.target
 
 Ubuntu szerveren az IP-cím beállítása a **Netplan** segítségével történik.
 
-### ** Statikus IP-cím beállítása**
+### Statikus IP-cím beállítása
 Nyisd meg a Netplan konfigurációs fájlt:
 
 ```bash
@@ -89,7 +89,7 @@ Ha hiba lép fel:
 sudo netplan --debug apply
 ```
 
-### ** IP-cím ellenőrzése**
+### IP-cím ellenőrzése
 Az új beállítások ellenőrzéséhez használd:
 
 ```bash
@@ -102,7 +102,7 @@ Vagy:
 ip route show
 ```
 
-### ** DHCP visszaállítása**
+### DHCP visszaállítása
 Ha dinamikus IP-címet szeretnél visszaállítani, szerkeszd a fájlt és állítsd be:
 
 ```yaml
