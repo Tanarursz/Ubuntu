@@ -235,6 +235,20 @@ Biztonsági beállítások:
 sudo mysql_secure_installation
 ```
 
+##  Forgalomirányítás és címfordítás (NAT)
+
+A hálózati csomagok irányításához és címfordításához az `iptables` vagy a `nftables` eszközök használhatók.
+
+###  IP forwarding engedélyezése
+
+Az IP-csomagok továbbításának engedélyezése:
+
+```bash
+echo 1 | sudo tee /proc/sys/net/ipv4/ip_forward
+```
+
+
+
 ##  Tűzfal és Proxy beállítások
 
 ### UFW tűzfal beállítása
