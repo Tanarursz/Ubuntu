@@ -66,7 +66,7 @@ Adja hozzá vagy módosítsa az alábbi beállításokat:
 network:
   version: 2
   ethernets:
-    eth0:
+    enp0s08:
       dhcp4: no
       addresses:
         - 192.168.1.100/24
