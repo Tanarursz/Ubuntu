@@ -121,6 +121,45 @@ sudo netplan apply
 
 Ez biztosítja, hogy az Ubuntu szerver mindig a megfelelő IP-címen legyen elérhető.
 
+
+##  Linkek kezelése Linux fájlrendszerben
+
+A Linux fájlrendszerében kétféle link létezik:
+- **Hard link**: Ugyanazon fájlt mutatja, nem különböztethető meg az eredetitől.
+- **Symbolic (soft) link**: Egy hivatkozás egy másik fájlra vagy könyvtárra.
+
+### ** Hard link létrehozása**
+
+```bash
+ln eredeti_fájl link_neve
+```
+
+### ** Symbolic link létrehozása**
+
+```bash
+ln -s eredeti_fájl link_neve
+```
+
+### ** Linkek listázása**
+
+```bash
+ls -l
+```
+
+A szimbolikus linkek egy "->" jellel mutatnak az eredeti fájlra.
+
+### ** Link törlése**
+
+- Hard link törlése:
+```bash
+rm link_neve
+```
+
+- Symbolic link törlése:
+```bash
+rm link_neve
+```
+
 ##  DHCP és DNS szolgáltatások
 
 ### **DHCP szerver telepítése és beállítása**
