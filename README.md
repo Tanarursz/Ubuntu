@@ -1,6 +1,6 @@
 # Ubuntu Szerver Alapjai
 
-## 1. Betöltési folyamatok és Boot Manager
+##  Betöltési folyamatok és Boot Manager
 
 Ubuntu szerver indításakor a következő lépések történnek:
 
@@ -29,7 +29,7 @@ A módosítások után frissítés:
 sudo update-grub
 ```
 
-## 2. Futási szintek (Runlevels)
+##  Futási szintek (Runlevels)
 
 Ubuntu a **systemd** rendszert használja, amely célokat (targets) kezel:
 
@@ -49,11 +49,11 @@ systemctl get-default
 sudo systemctl set-default multi-user.target
 ```
 
-## 3. IP-cím beállítása a szerveren
+##  IP-cím beállítása a szerveren
 
 Ubuntu szerveren az IP-cím beállítása a **Netplan** segítségével történik.
 
-### **3.1. Statikus IP-cím beállítása**
+### ** Statikus IP-cím beállítása**
 Nyisd meg a Netplan konfigurációs fájlt:
 
 ```bash
@@ -89,7 +89,7 @@ Ha hiba lép fel:
 sudo netplan --debug apply
 ```
 
-### **3.2. IP-cím ellenőrzése**
+### ** IP-cím ellenőrzése**
 Az új beállítások ellenőrzéséhez használd:
 
 ```bash
@@ -102,7 +102,7 @@ Vagy:
 ip route show
 ```
 
-### **3.3. DHCP visszaállítása**
+### ** DHCP visszaállítása**
 Ha dinamikus IP-címet szeretnél visszaállítani, szerkeszd a fájlt és állítsd be:
 
 ```yaml
@@ -121,7 +121,7 @@ sudo netplan apply
 
 Ez biztosítja, hogy az Ubuntu szerver mindig a megfelelő IP-címen legyen elérhető.
 
-## 4. DHCP és DNS szolgáltatások
+##  DHCP és DNS szolgáltatások
 
 ### **DHCP szerver telepítése és beállítása**
 
@@ -158,7 +158,7 @@ zone "example.com" {
 };
 ```
 
-## 5. Web- és adatbázis-kiszolgálók
+##  Web- és adatbázis-kiszolgálók
 
 ### Apache telepítése és beállítása
 
@@ -194,7 +194,7 @@ Biztonsági beállítások:
 sudo mysql_secure_installation
 ```
 
-## 6. Tűzfal és Proxy beállítások
+##  Tűzfal és Proxy beállítások
 
 ### UFW tűzfal beállítása
 
@@ -217,7 +217,7 @@ http_access allow mynet
 http_port 3128
 ```
 
-## 7. Shell-szkriptek
+##  Shell-szkriptek
 
 ### Egyszerű shell script létrehozása
 
@@ -228,7 +228,7 @@ chmod +x script.sh
 ./script.sh
 ```
 
-## 8. Levelezési szolgáltatások
+##  Levelezési szolgáltatások
 
 ### Postfix telepítése és konfigurálása
 
