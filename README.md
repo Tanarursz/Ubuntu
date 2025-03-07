@@ -57,7 +57,7 @@ Ubuntu szerveren az IP-cím beállítása a **Netplan** segítségével történ
 Nyisd meg a Netplan konfigurációs fájlt:
 
 ```bash
-sudo nano /etc/netplan/00-installer-config.yaml
+sudo nano /etc/netplan/valami.yaml
 ```
 
 Adja hozzá vagy módosítsa az alábbi beállításokat:
