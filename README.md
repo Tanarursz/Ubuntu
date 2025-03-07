@@ -49,41 +49,83 @@ systemctl get-default
 sudo systemctl set-default multi-user.target
 ```
 
-## 3. Particionálás, fájlrendszerek és fájlműveletek
+## 3. IP-cím beállítása a szerveren
 
-### Új lemez particionálása
+Ubuntu szerveren az IP-cím beállítása a **Netplan** segítségével történik.
 
-```bash
-sudo fdisk /dev/sdb
-```
-
-Parancsok:
-
-- `n` - Új partíció létrehozása
-- `p` - Elsődleges partíció
-- `w` - Módosítások mentése
-
-### Fájlrendszer létrehozása
+### **3.1. Statikus IP-cím beállítása**
+Nyisd meg a Netplan konfigurációs fájlt:
 
 ```bash
-sudo mkfs.ext4 /dev/sdb1
+sudo nano /etc/netplan/00-installer-config.yaml
 ```
 
-### Csatolás
+Adja hozzá vagy módosítsa az alábbi beállításokat:
+
+```yaml
+network:
+  version: 2
+  ethernets:
+    eth0:
+      dhcp4: no
+      addresses:
+        - 192.168.1.100/24
+      gateway4: 192.168.1.1
+      nameservers:
+        addresses:
+          - 8.8.8.8
+          - 8.8.4.4
+```
+
+Konfiguráció alkalmazása:
 
 ```bash
-sudo mount /dev/sdb1 /mnt
+sudo netplan apply
 ```
 
-### Állandó csatolás (`/etc/fstab` szerkesztése)
+Ha hiba lép fel:
 
 ```bash
-/dev/sdb1  /mnt  ext4  defaults  0  2
+sudo netplan --debug apply
 ```
+
+### **3.2. IP-cím ellenőrzése**
+Az új beállítások ellenőrzéséhez használd:
+
+```bash
+ip a
+```
+
+Vagy:
+
+```bash
+ip route show
+```
+
+### **3.3. DHCP visszaállítása**
+Ha dinamikus IP-címet szeretnél visszaállítani, szerkeszd a fájlt és állítsd be:
+
+```yaml
+network:
+  version: 2
+  ethernets:
+    eth0:
+      dhcp4: yes
+```
+
+Majd alkalmazd:
+
+```bash
+sudo netplan apply
+```
+
+Ez biztosítja, hogy az Ubuntu szerver mindig a megfelelő IP-címen legyen elérhető.
 
 ## 4. DHCP és DNS szolgáltatások
 
-### DHCP szerver telepítése és beállítása
+### **DHCP szerver telepítése és beállítása**
+
+Telepítés:
 
 ```bash
 sudo apt install isc-dhcp-server
@@ -101,7 +143,7 @@ subnet 192.168.1.0 netmask 255.255.255.0 {
 }
 ```
 
-### DNS szerver (Bind9) telepítése
+### **DNS szerver (Bind9) telepítése**
 
 ```bash
 sudo apt install bind9
@@ -118,7 +160,7 @@ zone "example.com" {
 
 ## 5. Web- és adatbázis-kiszolgálók
 
-### Apache telepítése és beállítása
+### **Apache telepítése és beállítása**
 
 ```bash
 sudo apt install apache2
@@ -126,7 +168,7 @@ sudo apt install apache2
 
 Konfiguráció (`/etc/apache2/sites-available/000-default.conf`):
 
-```bash
+```apache
 <VirtualHost *:80>
     DocumentRoot /var/www/html
     ErrorLog ${APACHE_LOG_DIR}/error.log
@@ -138,84 +180,6 @@ Konfiguráció (`/etc/apache2/sites-available/000-default.conf`):
 
 ```bash
 sudo systemctl restart apache2
-```
-
-### MySQL telepítése és beállítása
-
-```bash
-sudo apt install mysql-server
-```
-
-Biztonsági beállítások:
-
-```bash
-sudo mysql_secure_installation
-```
-
-## 6. Tűzfal és Proxy beállítások
-
-### UFW tűzfal beállítása
-
-```bash
-sudo ufw enable
-sudo ufw allow 80/tcp
-```
-
-### Squid proxy telepítése és konfigurálása
-
-```bash
-sudo apt install squid
-```
-
-Konfiguráció (`/etc/squid/squid.conf`):
-
-```bash
-acl mynet src 192.168.1.0/24
-http_access allow mynet
-http_port 3128
-```
-
-## 7. Shell-szkriptek
-
-### Egyszerű shell script létrehozása
-
-```bash
-echo -e "#!/bin/bash
-echo 'Hello, Ubuntu!'" > script.sh
-chmod +x script.sh
-./script.sh
-```
-
-## 8. Levelezési szolgáltatások
-
-### Postfix telepítése és konfigurálása
-
-```bash
-sudo apt install postfix
-```
-
-Beállítás (`/etc/postfix/main.cf`):
-
-```bash
-myhostname = mail.example.com
-mydestination = example.com, localhost.localdomain, localhost
-relayhost = 
-mailbox_size_limit = 0
-recipient_delimiter = +
-inbox_style = Maildir
-```
-
-### Dovecot telepítése és konfigurálása
-
-```bash
-sudo apt install dovecot-imapd dovecot-pop3d
-```
-
-Konfiguráció (`/etc/dovecot/dovecot.conf`):
-
-```bash
-protocols = imap pop3
-mail_location = maildir:~/Maildir
 ```
 
 Ez a dokumentum részletes beállításokat tartalmaz az Ubuntu szerverhez.
