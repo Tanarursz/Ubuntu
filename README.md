@@ -169,6 +169,9 @@ A Linux fájlrendszerében kétféle link létezik:
 ```bash
 ln eredeti_fájl link_neve
 ```
+```bash
+ln eredeti_fajl.txt hard_link_fajl.txt```
+
 
 ### Symbolic link létrehozása
 
