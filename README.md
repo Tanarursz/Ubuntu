@@ -199,6 +199,27 @@ rm link_neve
 rm link_neve
 ```
 
+
+## Fájlhozzáférések és ACL-ek
+
+### Fájlengedélyek módosítása
+
+```bash
+sudo chmod 755 fájl_neve
+```
+
+### Tulajdonos módosítása
+
+```bash
+sudo chown user:group fájl_neve
+```
+
+### ACL használata
+
+```bash
+sudo setfacl -m u:felhasználó:rwx fájl_neve
+
+
 ##  DHCP és DNS szolgáltatások
 
 ### DHCP szerver telepítése és beállítása
