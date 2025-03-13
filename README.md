@@ -123,7 +123,7 @@ Vagy:
 ```bash
 ip route show
 ```
-## 3. Particionálás, fájlrendszerek és fájlműveletek
+## Particionálás, fájlrendszerek és fájlműveletek
 
 ### Új lemez particionálása
 
