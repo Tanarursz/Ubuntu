@@ -104,6 +104,56 @@ Vagy:
 ip route show
 ```
 
+## Forgalomirányítás és címfordítás (NAT)
+
+A hálózati csomagok irányításához és címfordításához az `iptables` vagy a `nftables` eszközök használhatók.
+
+### IP forwarding engedélyezése**
+
+Az IP-csomagok továbbításának engedélyezése:
+
+```bash
+echo 1 | sudo tee /proc/sys/net/ipv4/ip_forward
+```
+
+Vagy állandó beállításként a `/etc/sysctl.conf` fájlba:
+
+```bash
+net.ipv4.ip_forward = 1
+```
+
+A módosítások alkalmazása:
+
+```bash
+sudo sysctl -p
+```
+
+### Masquerading beállítása (NAT)**
+
+Ha a szerver egy átjáróként működik, a következő iptables szabály szükséges a hálózat eléréséhez:
+
+```bash
+sudo iptables -t nat -A POSTROUTING -o eth0 -j MASQUERADE
+```
+
+A szabály mentése az `iptables` konfigurációba:
+
+```bash
+sudo iptables-save | sudo tee /etc/iptables/rules.v4
+```
+
+### Port továbbítás beállítása**
+
+Példa arra, hogyan lehet egy bejövő portot egy másik IP-címre továbbítani:
+
+```bash
+sudo iptables -t nat -A PREROUTING -p tcp --dport 8080 -j DNAT --to-destination 192.168.1.100:80
+```
+
+Ez a szabály a szerver 8080-as portjára érkező kéréseket a 192.168.1.100 gép 80-as portjára továbbítja.
+
+
+
 ### DHCP visszaállítása
 Ha dinamikus IP-címet szeretnél visszaállítani, szerkeszd a fájlt és állítsd be:
 
