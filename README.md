@@ -130,12 +130,19 @@ ip route show
 ```bash
 sudo fdisk /dev/sdb
 ```
+### Merevlemezek listázása
+
+```bash
+sudo fdisk -l
+```
 
 Parancsok:
 
 - `n` - Új partíció létrehozása
 - `p` - Elsődleges partíció
 - `w` - Módosítások mentése
+
+
 
 ### Fájlrendszer létrehozása
 
