@@ -242,10 +242,32 @@ subnet 192.168.1.0 netmask 255.255.255.0 {
 }
 ```
 
-### DNS szerver (Bind9) telepítése
+dhcp szerver hálózati kártyájának beáálitása/triggelése
 
 ```bash
-sudo apt install bind9
+sudo nano /etc/default/isc-dhcp-server
+```
+Konfiguráció (`/etc/default/isc-dhcp-server`):
+
+## szerkezsd az alábbi fáljt e módon
+
+```bash
+INTERFACESv4="enp0s08"
+INTERFACESv6=""
+```
+__UwU__
+
+__(づ ◕‿◕ )づ__
+
+dhcp szerver elinditása
+
+```bash
+sudo systemctl start isc.service
+```
+dhcp szerver ellenörzése
+
+```bash
+sudo systemctl start isc.service
 ```
 
 Konfiguráció (`/etc/bind/named.conf.local`):
@@ -254,7 +276,6 @@ Konfiguráció (`/etc/bind/named.conf.local`):
 zone "example.com" {
     type master;
     file "/etc/bind/db.example.com";
-};
 ```
 
 ##  Web- és adatbázis-kiszolgálók
