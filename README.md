@@ -218,7 +218,7 @@ sudo chown user:group fájl_neve
 
 ```bash
 sudo setfacl -m u:felhasználó:rwx fájl_neve
-
+```
 
 ##  DHCP és DNS szolgáltatások
 
