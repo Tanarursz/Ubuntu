@@ -330,17 +330,19 @@ http_access allow mynet
 http_port 3128
 ```
 
-##  Shell-szkriptek
+## Shell-beállítások, segédprogramok és pipeline
 
-### Egyszerű shell script létrehozása
+### Shell környezeti változók beállítása
 
 ```bash
-echo -e "#!/bin/bash
-echo 'Hello, Ubuntu!'" > script.sh
-chmod +x script.sh
-./script.sh
+export PATH=$PATH:/custom/path
 ```
 
+### Pipeline használata
+
+```bash
+ls -l | grep .txt | wc -l
+```
 ##  Levelezési szolgáltatások
 
 ### Postfix telepítése és konfigurálása
