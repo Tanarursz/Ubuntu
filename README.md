@@ -91,6 +91,26 @@ Ha hiba lép fel:
 sudo netplan --debug apply
 ```
 
+
+### DHCP visszaállítása
+Ha dinamikus IP-címet szeretnél visszaállítani, szerkeszd a fájlt és állítsd be:
+
+```yaml
+network:
+  version: 2
+  ethernets:
+    eth0:
+      dhcp4: yes
+```
+
+Majd alkalmazd:
+
+```bash
+sudo netplan apply
+```
+
+Ez biztosítja, hogy az Ubuntu szerver mindig a megfelelő IP-címen legyen elérhető.
+
 ### IP-cím ellenőrzése
 Az új beállítások ellenőrzéséhez használd:
 
@@ -136,24 +156,6 @@ sudo mount /dev/sdb1 /mnt
 ```
 
 
-### DHCP visszaállítása
-Ha dinamikus IP-címet szeretnél visszaállítani, szerkeszd a fájlt és állítsd be:
-
-```yaml
-network:
-  version: 2
-  ethernets:
-    eth0:
-      dhcp4: yes
-```
-
-Majd alkalmazd:
-
-```bash
-sudo netplan apply
-```
-
-Ez biztosítja, hogy az Ubuntu szerver mindig a megfelelő IP-címen legyen elérhető.
 
 
 ##  Linkek kezelése Linux fájlrendszerben
