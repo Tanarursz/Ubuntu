@@ -103,6 +103,39 @@ Vagy:
 ```bash
 ip route show
 ```
+## 3. Particionálás, fájlrendszerek és fájlműveletek
+
+### Új lemez particionálása
+
+```bash
+sudo fdisk /dev/sdb
+```
+
+Parancsok:
+
+- `n` - Új partíció létrehozása
+- `p` - Elsődleges partíció
+- `w` - Módosítások mentése
+
+### Fájlrendszer létrehozása
+
+```bash
+sudo mkfs.ext4 /dev/sdb1
+```
+
+### Csatolás
+
+```bash
+sudo mount /dev/sdb1 /mnt
+```
+
+### Állandó csatolás (`/etc/fstab` szerkesztése)
+
+```bash
+/dev/sdb1  /mnt  ext4  defaults  0  2
+```
+
+
 
 ## Forgalomirányítás és címfordítás (NAT)
 
