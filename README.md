@@ -231,7 +231,7 @@ sudo apt install isc-dhcp-server
 ```
 
 Konfiguráció (`/etc/dhcp/dhcpd.conf`):
-
+# NEM JÓ
 ```bash
 default-lease-time 600;
 max-lease-time 7200;
