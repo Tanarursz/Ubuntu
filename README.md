@@ -56,8 +56,10 @@ Ubuntu szerveren az IP-cím beállítása a **Netplan** segítségével történ
 ### Statikus IP-cím beállítása
 Nyisd meg a Netplan konfigurációs fájlt:
 
+__A netplan könyvtárban van egy .yaml végződésű fálj azt nyisd meg/!__
+
 ```bash
-sudo nano /etc/netplan/valami.yaml
+sudo nano /etc/netplan/XXX.yaml
 ```
 
 Adja hozzá vagy módosítsa az alábbi beállításokat:
@@ -71,15 +73,10 @@ network:
     enp0s08:
       dhcp4: false
       addresses:
-        - 192.168.1.100/24
-      gateway4: 192.168.1.1
-      nameservers:
-        addresses:
-          - 8.8.8.8
-          - 8.8.4.4
+        - 192.168.1.69/24
 ```
 
-Konfiguráció alkalmazása:
+Konfiguráció elmentése:
 
 ```bash
 sudo netplan apply
@@ -171,7 +168,7 @@ ln eredeti_fájl link_neve
 ```
 ```bash
 ln eredeti_fajl.txt hard_link_fajl.txt```
-
+```
 
 ### Symbolic link létrehozása
 
@@ -220,9 +217,10 @@ sudo chown user:group fájl_neve
 sudo setfacl -m u:felhasználó:rwx fájl_neve
 ```
 
-##  DHCP és DNS szolgáltatások
+##  DHCP és DNS szolgáltatások 
 
 ### DHCP szerver telepítése és beállítása
+||| __javitott verzió__ |||
 
 Telepítés:
 
@@ -230,19 +228,32 @@ Telepítés:
 sudo apt install isc-dhcp-server
 ```
 
-Konfiguráció (`/etc/dhcp/dhcpd.conf`):
-# NEM JÓ
+Konfiguráld a következő fáljt (`/etc/dhcp/dhcpd.conf`): (*A tabulátor egy jó cucc, használd*)
+
 ```bash
-default-lease-time 600;
-max-lease-time 7200;
+sudo nano /etc/dhcp/dhcpd.conf
+```
+__kommenteld ki a fálj elején a következő sorokat: (rakj a kód elé #-et)__
+```bash
+#option domain-name "example.org";
+#option domain-name-servers ns1.example.org, ns2.example.org;
+```
+__Ird bele a következőt:__
+
+### Az "option routers"-nél azt az ip cimet add meg amit adtál statikus ip cimet a háló kártáynak!
+
+```bash
+
 subnet 192.168.1.0 netmask 255.255.255.0 {
     range 192.168.1.100 192.168.1.200;
-    option routers 192.168.1.1;
     option domain-name-servers 8.8.8.8, 8.8.4.4;
+    option routers 192.168.1.69;
+    default-lease-time 600;
+    max-lease-time 7200;
 }
 ```
 
-dhcp szerver hálózati kártyájának beáálitása/triggelése
+dhcp szerver hálózati kártyájának beállitása:
 
 ```bash
 sudo nano /etc/default/isc-dhcp-server
@@ -255,20 +266,29 @@ Konfiguráció (`/etc/default/isc-dhcp-server`):
 INTERFACESv4="enp0s08"
 INTERFACESv6=""
 ```
-__UwU__
 
-__(づ ◕‿◕ )づ__
+## tűzfal UFW || portok engedélyezése amik akadályozhatnák a DHCP működését
+
+```bash
+
+sudo ufw allow 68/udp
+sudo ufw allow 67/udp
+sudo ufw enable
+
+```
 
 dhcp szerver elinditása
 
 ```bash
-sudo systemctl start isc.service
+sudo systemctl enable isc-dhcp-server
+sudo systemctl start isc-dhcp-server
 ```
 dhcp szerver ellenörzése
 
 ```bash
-sudo systemctl start isc.service
+sudo systemctl status isc-dhcp-server
 ```
+DHCP kész __:3__ 	     __(づ ◕‿◕ )づ__    
 
 Konfiguráció (`/etc/bind/named.conf.local`):
 
