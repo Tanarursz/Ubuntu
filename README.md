@@ -247,7 +247,7 @@ __kommenteld ki a fálj elején a következő sorokat: (rakj a kód elé #-et)__
 ```
 __Ird bele a következőt:__
 
-### Az "option routers"-nél azt az ip cimet add meg amit adtál statikus ip cimet a háló kártáynak!
+### Az "option routers"-nél azt az ip cimet add meg amit adtál statikus ip cimet a háló kártyának!
 
 ```bash
 
