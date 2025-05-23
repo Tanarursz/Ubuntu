@@ -74,7 +74,16 @@ network:
       dhcp4: false
       addresses:
         - 192.168.1.69/24
+      routes:
+        - to: 0.0.0.0/0
+          via: 192.168.1.1
 ```
+to: 0.0.0.0/0 → ez jelenti a default route-ot (minden forgalom ide megy, ha nincs más útvonal)
+
+via: 192.168.1.1 → ez a gateway IP címe, amin keresztül az alapértelmezett útvonal halad
+
+__Tehát ez a két sor együtt adja meg az alapértelmezett átjárót!__
+
 
 Konfiguráció elmentése:
 
